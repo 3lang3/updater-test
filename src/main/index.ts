@@ -2,10 +2,13 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { autoUpdater } from 'electron-updater'
+import logger from 'electron-log'
 
+let mainWindow: BrowserWindow
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
@@ -35,9 +38,37 @@ function createWindow(): void {
   }
 }
 
+function sendStatusToWindow(text) {
+  logger.info(text)
+  mainWindow.webContents.send('message', text)
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...')
+})
+autoUpdater.on('update-available', () => {
+  sendStatusToWindow('Update available.')
+})
+autoUpdater.on('update-not-available', () => {
+  sendStatusToWindow('Update not available.')
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err)
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = 'Download speed: ' + progressObj.bytesPerSecond
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
+  log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
+  sendStatusToWindow(log_message)
+})
+autoUpdater.on('update-downloaded', () => {
+  sendStatusToWindow('Update downloaded')
+})
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
@@ -59,6 +90,10 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+})
+
+app.on('ready', () => {
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

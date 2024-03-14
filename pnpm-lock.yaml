@@ -43,6 +43,9 @@ devDependencies:
   electron-builder:
     specifier: ^24.9.1
     version: 24.13.3(electron-builder-squirrel-windows@24.13.3)
+  electron-log:
+    specifier: ^5.1.2
+    version: 5.1.2
   electron-vite:
     specifier: ^2.0.0
     version: 2.1.0(vite@5.1.6)
@@ -1991,6 +1994,11 @@ packages:
     transitivePeerDependencies:
       - electron-builder-squirrel-windows
       - supports-color
+    dev: true
+
+  /electron-log@5.1.2:
+    resolution: {integrity: sha512-Cpg4hAZ27yM9wzE77c4TvgzxzavZ+dVltCczParXN+Vb3jocojCSAuSMCVOI9fhFuuOR+iuu3tZLX1cu0y0kgQ==}
+    engines: {node: '>= 14'}
     dev: true
 
   /electron-publish@24.13.1:

@@ -1,12 +1,23 @@
 import Versions from './components/Versions'
 import electronLogo from './assets/electron.svg'
+import { useEffect, useState } from 'react'
 
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+  const [messages, setMessages] = useState<string[]>([])
+
+  useEffect(() => {
+    window.electron.ipcRenderer.on('message', (_e, txt) => {
+      setMessages((prev) => [...prev, txt])
+    })
+  }, [])
 
   return (
     <>
       v1.0.1
+      {messages.map((msg, i) => (
+        <div key={i}>{msg}</div>
+      ))}
       <img alt="logo" className="logo" src={electronLogo} />
       <div className="creator">Powered by electron-vite</div>
       <div className="text">
