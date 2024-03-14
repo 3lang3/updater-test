@@ -8,7 +8,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     window.electron.ipcRenderer.on('message', (_e, txt) => {
-      console.log('🚀 ~ window.electron.ipcRenderer.on ~ txt:', txt)
+      console.log('🚀 ~ window.electron.ipcRenderer.on ~ txt123:', txt)
       setMessages((prev) => [...prev, txt])
     })
   }, [])
