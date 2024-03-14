@@ -27,6 +27,7 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: 
     - appBundleId: com.3lang3-updater-test.app
+    - acsProvider: 8GVZYX4YQ6
 dmg:
   artifactName: ${name}-${version}.${ext}
 linux:
