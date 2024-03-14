@@ -2,6 +2,7 @@ appId: com.makeitsimple.app
 productName: mis
 directories:
   buildResources: build
+# afterSign: build/notarize.js
 files:
   - '!**/.vscode/*'
   - '!src/*'
