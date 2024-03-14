@@ -6,6 +6,7 @@ import { autoUpdater } from 'electron-updater'
 import logger from 'electron-log'
 
 // autoUpdater.forceDevUpdateConfig = true
+// autoUpdater.autoDownload = true
 
 function createWindow(): void {
   // Create the browser window.

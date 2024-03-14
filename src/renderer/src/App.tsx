@@ -9,14 +9,13 @@ function App(): JSX.Element {
   useEffect(() => {
     window.electron.ipcRenderer.on('message', (_e, txt) => {
       console.log('🚀 ~ window.electron.ipcRenderer.on ~ txt:', txt)
-
       setMessages((prev) => [...prev, txt])
     })
   }, [])
 
   return (
     <>
-      v1.0.6
+      v1.0.2
       {messages.map((msg, i) => (
         <div key={i}>{msg}</div>
       ))}
