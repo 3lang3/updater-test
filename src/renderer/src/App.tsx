@@ -6,6 +6,7 @@ function App(): JSX.Element {
 
   return (
     <>
+      v1.0.1
       <img alt="logo" className="logo" src={electronLogo} />
       <div className="creator">Powered by electron-vite</div>
       <div className="text">
