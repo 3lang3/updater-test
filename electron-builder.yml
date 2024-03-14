@@ -1,5 +1,5 @@
-appId: com.3lang3-updater-test.app
-productName: 3lang3-updater-test
+appId: com.makeitsimple.app
+productName: mis
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: updater-test
+  executableName: mis
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -26,7 +26,7 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: 
-    - teamId: 8GVZYX4YQ6
+    teamId: 8GVZYX4YQ6
 dmg:
   artifactName: ${name}-${version}.${ext}
 linux:

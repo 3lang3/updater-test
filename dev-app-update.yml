@@ -1,4 +1,4 @@
 provider: github
 owner: 3lang3
 repo: updater-test
-updaterCacheDirName: updater-test-updater
+updaterCacheDirName: makeitsimple-updater
