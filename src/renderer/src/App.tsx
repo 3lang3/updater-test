@@ -8,18 +8,20 @@ function App(): JSX.Element {
 
   useEffect(() => {
     window.electron.ipcRenderer.on('message', (_e, txt) => {
+      console.log('🚀 ~ window.electron.ipcRenderer.on ~ txt:', txt)
+
       setMessages((prev) => [...prev, txt])
     })
   }, [])
 
   return (
     <>
-      v1.0.1
+      v1.0.6
       {messages.map((msg, i) => (
         <div key={i}>{msg}</div>
       ))}
       <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
+      <div className="creator">Powered by electron-vite123</div>
       <div className="text">
         Build an Electron app with <span className="react">React</span>
         &nbsp;and <span className="ts">TypeScript</span>
