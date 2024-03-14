@@ -7,7 +7,7 @@ import logger from 'electron-log'
 
 let mainWindow: BrowserWindow
 
-autoUpdater.forceDevUpdateConfig = true
+// autoUpdater.forceDevUpdateConfig = true
 // autoUpdater.autoDownload = true
 
 function createWindow(): void {
