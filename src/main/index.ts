@@ -5,10 +5,11 @@ import icon from '../../resources/icon.png?asset'
 import { autoUpdater } from 'electron-updater'
 import logger from 'electron-log'
 
-let mainWindow: BrowserWindow
+// autoUpdater.forceDevUpdateConfig = true
+
 function createWindow(): void {
   // Create the browser window.
-  mainWindow = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
@@ -38,38 +39,39 @@ function createWindow(): void {
   }
 }
 
-function sendStatusToWindow(text) {
-  logger.info(text)
-  mainWindow.webContents.send('message', text)
-}
-
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...')
-})
-autoUpdater.on('update-available', () => {
-  sendStatusToWindow('Update available.')
-})
-autoUpdater.on('update-not-available', () => {
-  sendStatusToWindow('Update not available.')
-})
-autoUpdater.on('error', (err) => {
-  sendStatusToWindow('Error in auto-updater. ' + err)
-})
-autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = 'Download speed: ' + progressObj.bytesPerSecond
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
-  log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
-  sendStatusToWindow(log_message)
-})
-autoUpdater.on('update-downloaded', () => {
-  sendStatusToWindow('Update downloaded')
-})
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 
 app.whenReady().then(() => {
+  const mainWindow = BrowserWindow.getAllWindows()[0]
+  function sendStatusToWindow(text) {
+    logger.info(text)
+    mainWindow.webContents.send('message', text)
+  }
+
+  autoUpdater.on('checking-for-update', () => {
+    sendStatusToWindow('Checking for update...')
+  })
+  autoUpdater.on('update-available', () => {
+    sendStatusToWindow('Update available.')
+  })
+  autoUpdater.on('update-not-available', () => {
+    sendStatusToWindow('Update not available.')
+  })
+  autoUpdater.on('error', (err) => {
+    sendStatusToWindow('Error in auto-updater. ' + err)
+  })
+  autoUpdater.on('download-progress', (progressObj) => {
+    let log_message = 'Download speed: ' + progressObj.bytesPerSecond
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
+    log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
+    sendStatusToWindow(log_message)
+  })
+  autoUpdater.on('update-downloaded', () => {
+    sendStatusToWindow('Update downloaded')
+  })
+
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
