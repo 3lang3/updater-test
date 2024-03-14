@@ -5,12 +5,14 @@ import icon from '../../resources/icon.png?asset'
 import { autoUpdater } from 'electron-updater'
 import logger from 'electron-log'
 
-// autoUpdater.forceDevUpdateConfig = true
+let mainWindow: BrowserWindow
+
+autoUpdater.forceDevUpdateConfig = true
 // autoUpdater.autoDownload = true
 
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
@@ -45,7 +47,6 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 
 app.whenReady().then(() => {
-  const mainWindow = BrowserWindow.getAllWindows()[0]
   function sendStatusToWindow(text) {
     logger.info(text)
     mainWindow.webContents.send('message', text)
