@@ -38,11 +38,11 @@ linux:
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-# publish:
-#   provider: github
-#   owner: 3lang3
-#   repo: updater-test
-#   updaterCacheDirName: updater-test-updater
+publish:
+  provider: github
+  owner: 3lang3
+  repo: updater-test
+  updaterCacheDirName: updater-test-updater
 
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
