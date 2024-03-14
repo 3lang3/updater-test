@@ -1,4 +1,4 @@
-const { notarize } = require('electron-notarize')
+const { notarize } = require('@electron/notarize')
 const path = require('path')
 
 exports.default = async function notarizing(context) {
@@ -16,13 +16,13 @@ exports.default = async function notarizing(context) {
   const appPath = path.normalize(path.join(context.appOutDir, `${appName}.app`))
   const appleId = process.env.APPLE_ID
   const appleIdPassword = process.env.APPLE_APP_SPECIFIC_PASSWORD
-  const ascProvider = process.env.ASC_PROVIDER
+  const teamId = process.env.ASC_PROVIDER
   console.log('🚀', appBundleId)
   console.log('🚀', appName)
   console.log('🚀', appPath)
   console.log('🚀', appleId)
   console.log('🚀', appleIdPassword)
-  console.log('🚀', ascProvider)
+  console.log('🚀', teamId)
 
   if (!appleId) {
     console.warn('Not notarizing: Missing APPLE_ID environment variable')
@@ -37,6 +37,6 @@ exports.default = async function notarizing(context) {
     appPath,
     appleId,
     appleIdPassword,
-    ascProvider
+    teamId
   })
 }
