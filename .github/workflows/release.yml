@@ -5,6 +5,10 @@ on:
     tags:
       - v*.*.*
 
+env:
+  CSC_LINK: ${{ secrets.CSC_LINK }}
+  CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+
 jobs:
   release:
     runs-on: ${{ matrix.os }}
