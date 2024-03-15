@@ -33,7 +33,6 @@ exports.default = async function notarizing(context) {
     return
   }
   return notarize({
-    appBundleId,
     appPath,
     appleId,
     appleIdPassword,
