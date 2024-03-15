@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -96,7 +96,18 @@ app.whenReady().then(() => {
   ipcMain.on('ping', () => sendStatusToWindow(app.getVersion()))
   ipcMain.on('install-update', () => {
     if (canInstall) {
-      autoUpdater.quitAndInstall()
+      dialog
+        .showMessageBox({
+          type: 'info',
+          title: 'Install Update',
+          message: 'A new version of the app is available. Do you want to install it now?',
+          buttons: ['Yes', 'No']
+        })
+        .then((result) => {
+          if (result.response === 0) {
+            autoUpdater.quitAndInstall()
+          }
+        })
     } else {
       sendStatusToWindow('Update not downloaded, please wait...')
     }

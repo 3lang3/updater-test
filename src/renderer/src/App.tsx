@@ -15,9 +15,20 @@ function App(): JSX.Element {
 
   return (
     <>
-      {messages.map((msg, i) => (
-        <div key={i}>{msg}</div>
-      ))}
+      <div
+        style={{
+          height: 200,
+          width: '100%',
+          overflowY: 'auto',
+          border: '1px solid #fff',
+          borderRadius: 5,
+          fontSize: 14
+        }}
+      >
+        {messages.map((msg, i) => (
+          <div key={i}>{msg}</div>
+        ))}
+      </div>
       <img alt="logo" className="logo" src={electronLogo} />
       <div className="creator">Powered by electron-vite123</div>
       <div className="text">
@@ -29,7 +40,7 @@ function App(): JSX.Element {
       </p>
       <div className="actions">
         <div className="action" onClick={() => window.electron.ipcRenderer.send('install-update')}>
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
+          <a href="javascript:;" target="_blank" rel="noreferrer">
             Install
           </a>
         </div>
