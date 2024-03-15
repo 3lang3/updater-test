@@ -9,7 +9,7 @@ let mainWindow: BrowserWindow
 
 // autoUpdater.forceDevUpdateConfig = true
 autoUpdater.autoDownload = true
-autoUpdater.autoInstallOnAppQuit = true
+autoUpdater.autoInstallOnAppQuit = false
 autoUpdater.autoRunAppAfterInstall = true
 
 function createWindow(): void {
@@ -49,17 +49,7 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 
-let updaterCheckTimer: NodeJS.Timeout | null = null
-const CHECK_FOR_UPDATES_INTERVAL = 3 * 60 * 1000
 let canInstall = false
-
-function startCheckForUpdates() {
-  updaterCheckTimer = setInterval(() => autoUpdater.checkForUpdates(), CHECK_FOR_UPDATES_INTERVAL)
-}
-
-function stopCheckForUpdates() {
-  updaterCheckTimer && clearInterval(updaterCheckTimer)
-}
 
 app.whenReady().then(() => {
   function sendStatusToWindow(text) {
@@ -71,12 +61,12 @@ app.whenReady().then(() => {
     sendStatusToWindow('Checking for update...')
   })
   autoUpdater.on('update-available', (info) => {
-    stopCheckForUpdates()
     console.log('🚀 ~ autoUpdater.on ~ info:', info)
     sendStatusToWindow(`Update available.${JSON.stringify(info)}`)
   })
   autoUpdater.on('update-not-available', () => {
     sendStatusToWindow('Update not available.')
+    setTimeout(() => autoUpdater.checkForUpdatesAndNotify(), 2 * 60 * 1000)
   })
   autoUpdater.on('error', (err) => {
     sendStatusToWindow('Error in auto-updater. ' + err)
@@ -122,7 +112,7 @@ app.whenReady().then(() => {
 })
 
 app.on('ready', () => {
-  startCheckForUpdates()
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
