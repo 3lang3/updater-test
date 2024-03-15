@@ -22,7 +22,8 @@ function createWindow(): void {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      devTools: is.dev
     }
   })
 
@@ -48,6 +49,18 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 
+let updaterCheckTimer: NodeJS.Timeout | null = null
+const CHECK_FOR_UPDATES_INTERVAL = 3 * 60 * 1000
+let canInstall = false
+
+function startCheckForUpdates() {
+  updaterCheckTimer = setInterval(() => autoUpdater.checkForUpdates(), CHECK_FOR_UPDATES_INTERVAL)
+}
+
+function stopCheckForUpdates() {
+  updaterCheckTimer && clearInterval(updaterCheckTimer)
+}
+
 app.whenReady().then(() => {
   function sendStatusToWindow(text) {
     logger.info(text)
@@ -57,7 +70,9 @@ app.whenReady().then(() => {
   autoUpdater.on('checking-for-update', () => {
     sendStatusToWindow('Checking for update...')
   })
-  autoUpdater.on('update-available', () => {
+  autoUpdater.on('update-available', (info) => {
+    stopCheckForUpdates()
+    console.log('🚀 ~ autoUpdater.on ~ info:', info)
     sendStatusToWindow('Update available.')
   })
   autoUpdater.on('update-not-available', () => {
@@ -74,7 +89,7 @@ app.whenReady().then(() => {
   })
   autoUpdater.on('update-downloaded', () => {
     sendStatusToWindow('Update downloaded')
-    autoUpdater.quitAndInstall()
+    canInstall = true
   })
 
   // Set app user model id for windows
@@ -89,6 +104,13 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => sendStatusToWindow(app.getVersion()))
+  ipcMain.on('install-update', () => {
+    if (canInstall) {
+      autoUpdater.quitAndInstall()
+    } else {
+      sendStatusToWindow('Update not downloaded, please wait...')
+    }
+  })
 
   createWindow()
 
@@ -100,7 +122,7 @@ app.whenReady().then(() => {
 })
 
 app.on('ready', () => {
-  autoUpdater.checkForUpdatesAndNotify()
+  startCheckForUpdates()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

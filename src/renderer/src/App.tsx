@@ -28,9 +28,9 @@ function App(): JSX.Element {
         Please try pressing <code>F12</code> to open the devTool
       </p>
       <div className="actions">
-        <div className="action">
+        <div className="action" onClick={() => window.electron.ipcRenderer.send('install-update')}>
           <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
+            Install
           </a>
         </div>
         <div className="action">
