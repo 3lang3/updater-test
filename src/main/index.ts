@@ -65,7 +65,7 @@ app.whenReady().then(() => {
     sendStatusToWindow(`Update available.${JSON.stringify(info)}`)
   })
   autoUpdater.on('update-not-available', () => {
-    sendStatusToWindow('Update not available.')
+    sendStatusToWindow('Update not available, 2 minutes later check again.')
     setTimeout(() => autoUpdater.checkForUpdatesAndNotify(), 2 * 60 * 1000)
   })
   autoUpdater.on('error', (err) => {
