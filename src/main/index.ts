@@ -8,7 +8,9 @@ import logger from 'electron-log'
 let mainWindow: BrowserWindow
 
 // autoUpdater.forceDevUpdateConfig = true
-// autoUpdater.autoDownload = true
+autoUpdater.autoDownload = true
+autoUpdater.autoInstallOnAppQuit = true
+autoUpdater.autoRunAppAfterInstall = true
 
 function createWindow(): void {
   // Create the browser window.
@@ -72,6 +74,7 @@ app.whenReady().then(() => {
   })
   autoUpdater.on('update-downloaded', () => {
     sendStatusToWindow('Update downloaded')
+    autoUpdater.quitAndInstall()
   })
 
   // Set app user model id for windows
@@ -85,7 +88,7 @@ app.whenReady().then(() => {
   })
 
   // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
+  ipcMain.on('ping', () => sendStatusToWindow(app.getVersion()))
 
   createWindow()
 

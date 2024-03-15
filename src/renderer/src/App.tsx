@@ -15,7 +15,6 @@ function App(): JSX.Element {
 
   return (
     <>
-      v1.0.1
       {messages.map((msg, i) => (
         <div key={i}>{msg}</div>
       ))}
