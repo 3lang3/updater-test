@@ -73,7 +73,7 @@ app.whenReady().then(() => {
   autoUpdater.on('update-available', (info) => {
     stopCheckForUpdates()
     console.log('🚀 ~ autoUpdater.on ~ info:', info)
-    sendStatusToWindow('Update available.')
+    sendStatusToWindow(`Update available.${JSON.stringify(info)}`)
   })
   autoUpdater.on('update-not-available', () => {
     sendStatusToWindow('Update not available.')
