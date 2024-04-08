@@ -3,6 +3,7 @@ import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 import Database from 'better-sqlite3'
 import path from 'node:path'
 import { app } from 'electron'
+import { logger } from './logger'
 
 export let db: BetterSQLite3Database
 
@@ -24,6 +25,6 @@ export const sqliteMigrateUpdate = () => {
       : path.join(process.cwd(), './src/main/db/migrations')
     migrate(db, { migrationsFolder })
   } catch (error) {
-    console.error('数据库迁移失败', error)
+    logger.error('数据库迁移失败', error)
   }
 }
