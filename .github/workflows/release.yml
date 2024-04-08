@@ -37,21 +37,15 @@ jobs:
 
       - name: build-mac-arm64
         if: matrix.os == 'macos-arm64-latest'
-        run: 
-          - npm run postinstall:arm64
-          - npm run build:mac:arm64
+        run: npm run postinstall:arm64 && npm run build:mac:arm64
 
       - name: build-mac-x64
         if: matrix.os == 'macos-x64-latest'
-        run: 
-          - npm run postinstall:x64
-          - npm run build:mac:x64
+        run: npm run postinstall:x64 && npm run build:mac:x64
 
       - name: build-win
         if: matrix.os == 'windows-latest'
-        run: 
-          - npm run postinstall:ia32
-          - npm run build:win
+        run: npm run postinstall:ia32 && npm run build:win
 
       - name: release
         uses: softprops/action-gh-release@v1
