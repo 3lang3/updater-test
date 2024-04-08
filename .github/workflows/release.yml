@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-arm64-latest, macos-x64-latest, windows-latest]
+        os: [macos-latest, windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -36,11 +36,11 @@ jobs:
         run: npm run build:linux
 
       - name: build-mac-arm64
-        if: matrix.os == 'macos-arm64-latest'
+        if: matrix.os == 'macos-latest'
         run: npm run postinstall:arm64 && npm run build:mac:arm64
 
       - name: build-mac-x64
-        if: matrix.os == 'macos-x64-latest'
+        if: matrix.os == 'macos-latest'
         run: npm run postinstall:x64 && npm run build:mac:x64
 
       - name: build-win

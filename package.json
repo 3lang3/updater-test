@@ -21,7 +21,7 @@
     "postinstall:x64": "electron-builder install-app-deps --arch x64",
     "postinstall:ia32": "electron-builder install-app-deps --arch ia32",
     "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
+    "build:win": "npm run build && electron-builder --win --nsis",
     "build:mac:arm64": "electron-vite build && electron-builder --mac --arm64",
     "build:mac:x64": "electron-vite build && electron-builder --mac --x64",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
