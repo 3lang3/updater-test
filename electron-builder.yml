@@ -20,6 +20,7 @@ asarUnpack:
   - out/main/chunks/*.node
 win:
   executableName: mis
+  publisherName: Huang Zhang
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
