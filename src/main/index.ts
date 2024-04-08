@@ -4,6 +4,8 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { autoUpdater } from 'electron-updater'
 import logger from 'electron-log'
+import { sqliteInit, sqliteMigrateUpdate } from './db/init'
+import { registerHandlers } from './handlers'
 
 let mainWindow: BrowserWindow
 
@@ -51,76 +53,81 @@ function createWindow(): void {
 
 let canInstall = false
 
-app.whenReady().then(() => {
-  function sendStatusToWindow(text) {
-    logger.info(text)
-    mainWindow.webContents.send('message', text)
-  }
-
-  autoUpdater.on('checking-for-update', () => {
-    sendStatusToWindow('Checking for update...')
-  })
-  autoUpdater.on('update-available', (info) => {
-    console.log('🚀 ~ autoUpdater.on ~ info:', info)
-    sendStatusToWindow(`Update available.${JSON.stringify(info)}`)
-  })
-  autoUpdater.on('update-not-available', () => {
-    sendStatusToWindow('Update not available, 2 minutes later check again.')
-    setTimeout(() => autoUpdater.checkForUpdatesAndNotify(), 2 * 60 * 1000)
-  })
-  autoUpdater.on('error', (err) => {
-    sendStatusToWindow('Error in auto-updater. ' + err)
-  })
-  autoUpdater.on('download-progress', (progressObj) => {
-    let log_message = 'Download speed: ' + progressObj.bytesPerSecond
-    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
-    log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
-    sendStatusToWindow(log_message)
-  })
-  autoUpdater.on('update-downloaded', () => {
-    sendStatusToWindow('Update downloaded')
-    canInstall = true
-  })
-
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
-
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
-
-  // IPC test
-  ipcMain.on('ping', () => sendStatusToWindow(app.getVersion()))
-  ipcMain.on('install-update', () => {
-    if (canInstall) {
-      dialog
-        .showMessageBox({
-          type: 'info',
-          title: 'Install Update',
-          message: 'A new version of the app is available. Do you want to install it now?',
-          buttons: ['Yes', 'No']
-        })
-        .then((result) => {
-          if (result.response === 0) {
-            autoUpdater.quitAndInstall()
-          }
-        })
-    } else {
-      sendStatusToWindow('Update not downloaded, please wait...')
+app
+  .whenReady()
+  .then(sqliteInit)
+  .then(sqliteMigrateUpdate)
+  .then(registerHandlers)
+  .then(() => {
+    function sendStatusToWindow(text) {
+      logger.info(text)
+      mainWindow.webContents.send('message', text)
     }
-  })
 
-  createWindow()
+    autoUpdater.on('checking-for-update', () => {
+      sendStatusToWindow('Checking for update...')
+    })
+    autoUpdater.on('update-available', (info) => {
+      console.log('🚀 ~ autoUpdater.on ~ info:', info)
+      sendStatusToWindow(`Update available.${JSON.stringify(info)}`)
+    })
+    autoUpdater.on('update-not-available', () => {
+      sendStatusToWindow('Update not available, 2 minutes later check again.')
+      setTimeout(() => autoUpdater.checkForUpdatesAndNotify(), 2 * 60 * 1000)
+    })
+    autoUpdater.on('error', (err) => {
+      sendStatusToWindow('Error in auto-updater. ' + err)
+    })
+    autoUpdater.on('download-progress', (progressObj) => {
+      let log_message = 'Download speed: ' + progressObj.bytesPerSecond
+      log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
+      log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
+      sendStatusToWindow(log_message)
+    })
+    autoUpdater.on('update-downloaded', () => {
+      sendStatusToWindow('Update downloaded')
+      canInstall = true
+    })
 
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    // Set app user model id for windows
+    electronApp.setAppUserModelId('com.electron')
+
+    // Default open or close DevTools by F12 in development
+    // and ignore CommandOrControl + R in production.
+    // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+    app.on('browser-window-created', (_, window) => {
+      optimizer.watchWindowShortcuts(window)
+    })
+
+    // IPC test
+    ipcMain.on('ping', () => sendStatusToWindow(app.getVersion()))
+    ipcMain.on('install-update', () => {
+      if (canInstall) {
+        dialog
+          .showMessageBox({
+            type: 'info',
+            title: 'Install Update',
+            message: 'A new version of the app is available. Do you want to install it now?',
+            buttons: ['Yes', 'No']
+          })
+          .then((result) => {
+            if (result.response === 0) {
+              autoUpdater.quitAndInstall()
+            }
+          })
+      } else {
+        sendStatusToWindow('Update not downloaded, please wait...')
+      }
+    })
+
+    createWindow()
+
+    app.on('activate', function () {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    })
   })
-})
 
 app.on('ready', () => {
   autoUpdater.checkForUpdatesAndNotify()

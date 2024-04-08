@@ -1,8 +1,20 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { TableLogRow } from '../main/db/schema'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  dbq: {
+    getLogs: async () => {
+      return ipcRenderer.invoke('db:getLogs') as Promise<TableLogRow[]>
+    },
+    insertLog: async (text: string) => {
+      return ipcRenderer.invoke('db:insertLog', text) as Promise<void>
+    }
+  }
+}
+
+export type GlobalWindowApi = typeof api
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

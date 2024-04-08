@@ -1,6 +1,6 @@
 {
   "name": "mis",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",
@@ -20,12 +20,17 @@
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux"
+    "build:linux": "electron-vite build && electron-builder --linux",
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
+    "db:migrate": "npx drizzle-kit generate:sqlite --out src/main/db/migrations --schema src/main/db/schema.ts"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "@electron/notarize": "^2.3.0",
+    "better-sqlite3": "^9.4.5",
+    "drizzle-kit": "^0.20.14",
+    "drizzle-orm": "^0.30.7",
     "electron-updater": "^6.1.7"
   },
   "devDependencies": {
@@ -47,6 +52,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12"
+    "vite": "^5.0.12",
+    "electron-rebuild": "^3.2.9"
   }
 }

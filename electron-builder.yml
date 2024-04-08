@@ -12,6 +12,9 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - resources/**
+  - node_modules/better-sqlite3
+  - node_modules/sqlite3
+  - out/main/chunks/*.node
 win:
   executableName: mis
 nsis:
@@ -19,6 +22,8 @@ nsis:
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  oneClick: false
+  allowToChangeInstallationDirectory: true
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
@@ -26,18 +31,8 @@ mac:
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-  notarize:
-    teamId: 8GVZYX4YQ6
+  notarize: false
 dmg:
-  artifactName: ${name}-${version}.${ext}
-linux:
-  target:
-    - AppImage
-    - snap
-    - deb
-  maintainer: electronjs.org
-  category: Utility
-appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:

@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1712556943653,
+      "tag": "0000_noisy_vulture",
+      "breakpoints": true
+    }
+  ]
+}

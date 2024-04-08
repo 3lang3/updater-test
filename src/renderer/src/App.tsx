@@ -7,9 +7,19 @@ function App(): JSX.Element {
   const [messages, setMessages] = useState<string[]>([])
 
   useEffect(() => {
+    window.api.dbq
+      .getLogs()
+      .then((logs) => {
+        setMessages(logs.map((log) => log.text))
+      })
+      .catch(console.error)
+  }, [])
+
+  useEffect(() => {
     window.electron.ipcRenderer.on('message', (_e, txt) => {
       console.log('🚀 ~ window.electron.ipcRenderer.on ~ txt123:', txt)
       setMessages((prev) => [...prev, txt])
+      window.api.dbq.insertLog(txt).catch(console.error)
     })
   }, [])
 

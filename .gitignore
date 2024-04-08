@@ -5,3 +5,4 @@ out
 *.log*
 electron-builder.env
 .env
+sqlite.db
