@@ -1,6 +1,6 @@
 {
   "name": "mis",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",
@@ -16,7 +16,7 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev --watch",
     "build": "npm run typecheck && electron-vite build",
-    "postinstall": "electron-builder install-app-deps --arch arm64",
+    "postinstall": "electron-builder install-app-deps",
     "postinstall:arm64": "electron-builder install-app-deps --arch arm64",
     "postinstall:x64": "electron-builder install-app-deps --arch x64",
     "postinstall:ia32": "electron-builder install-app-deps --arch ia32",

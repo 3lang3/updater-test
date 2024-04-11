@@ -51,6 +51,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: true
+          repository: 3lang3/release-test
           files: |
             dist/*.exe
             dist/*.zip
